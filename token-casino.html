@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Completely Innocent Website</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    #coverPage {
+      display: block;
+      padding: 40px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    #coverPage h1 {
+      font-size: 2rem;
+      color: #444;
+    }
+
+    #coverPage p {
+      line-height: 1.6;
+    }
+
+    #casinoContainer {
+      display: none;
+    }
+
+    /* Casino Styles (kept from before) */
+    .casino {
+      font-family: sans-serif;
+      background: #111;
+      color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .casino-inner {
+      max-width: 600px;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      border: 3px solid #FFD700;
+      text-align: center;
+    }
+
+    h1 {
+      color: gold;
+      margin-bottom: 10px;
+    }
+
+    .balance {
+      font-size: 1.2rem;
+      margin: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      background: gold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    input[type="number"], select {
+      width: 100px;
+      padding: 5px;
+      margin: 5px;
+      text-align: center;
+    }
+
+    .reels, .dice, .coin, .roulette, .guess {
+      font-size: 2rem;
+      margin: 15px 0;
+      min-height: 2.5em;
+    }
+
+    .result {
+      margin-top: 10px;
+      min-height: 2em;
+    }
+
+    .game-section {
+      margin-top: 20px;
+      padding: 10px;
+      background: #333;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fake Cover Page -->
+  <div id="coverPage">
+    <h1>Welcome to IpsumDaily News</h1>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae nunc at erat fermentum bibendum.
+      Morbi sit amet orci vitae sapien convallis interdum. Vivamus accumsan, massa id tincidunt consectetur,
+      arcu velit lobortis turpis, nec fringilla felis nisl nec neque.
+    </p>
+    <p>
+      Nulla facilisi. Integer sodales libero at velit dapibus, non sodales felis sodales.
+      Suspendisse potenti. In hac habitasse platea dictumst. Donec suscipit, urna id iaculis posuere,
+      tellus dolor commodo erat, at commodo massa quam vel risus.
+    </p>
+  </div>
+
+  <!-- Hidden Casino Container -->
+  <div id="casinoContainer" class="casino">
+    <div class="casino-inner">
+      <h1>🪙 Token Casino of Doom 🪙</h1>
+
+      <div id="setup">
+        <p>Enter your starting Tokens:</p>
+        <input type="number" id="startTokens" value="100" min="1" />
+        <button onclick="startGame()">Enter Casino</button>
+      </div>
+
+      <div id="gameArea" style="display:none;">
+        <div class="balance">Tokens: <span id="balance">0</span></div>
+
+        <!-- All game sections from before -->
+        <!-- Slot Machine -->
+        <div class="game-section">
+          <h2>🎰 Slot Machine</h2>
+          <div class="reels" id="reels">🍒 | 🍋 | 🍇</div>
+          <input type="number" id="slotBet" placeholder="Bet" min="1">
+          <button onclick="playSlot()">Spin</button>
+        </div>
+
+        <!-- Dice Roll -->
+        <div class="game-section">
+          <h2>🎲 Dice Roll (1–6)</h2>
+          <div class="dice" id="dice">🎲</div>
+          <select id="dicePick">
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="6">6</option>
+          </select>
+          <input type="number" id="diceBet" placeholder="Bet" min="1">
+          <button onclick="rollDice()">Roll Dice</button>
+        </div>
+
+        <!-- Coin Flip -->
+        <div class="game-section">
+          <h2>🪙 Coin Flip</h2>
+          <div class="coin" id="coin">🪙</div>
+          <select id="coinPick">
+            <option value="Heads">Heads</option>
+            <option value="Tails">Tails</option>
+          </select>
+          <input type="number" id="coinBet" placeholder="Bet" min="1">
+          <button onclick="flipCoin()">Flip Coin</button>
+        </div>
+
+        <!-- Roulette -->
+        <div class="game-section">
+          <h2>🎡 Roulette Lite</h2>
+          <div class="roulette" id="roulette">🔄</div>
+          <select id="roulettePick">
+            <option value="Red">Red</option>
+            <option value="Black">Black</option>
+          </select>
+          <input type="number" id="rouletteBet" placeholder="Bet" min="1">
+          <button onclick="spinRoulette()">Spin</button>
+        </div>
+
+        <!-- Number Guess -->
+        <div class="game-section">
+          <h2>🔢 Number Guess (1-10)</h2>
+          <div class="guess" id="guessResult">❓</div>
+          <input type="number" id="guessNumber" placeholder="Number" min="1" max="10">
+          <input type="number" id="guessBet" placeholder="Bet" min="1">
+          <button onclick="guessNumber()">Guess</button>
+        </div>
+
+        <div class="result" id="result"></div>
+        <button onclick="reset()">Reset Casino</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fake Login Key
+    let codeSequence = "";
+    document.addEventListener("keydown", e => {
+      codeSequence += e.key;
+      if (codeSequence.toLowerCase().includes("lorem ipsum")) {
+        document.getElementById("coverPage").style.display = "none";
+        document.getElementById("casinoContainer").style.display = "block";
+      }
+      if (codeSequence.length > 20) codeSequence = codeSequence.slice(-20);
+    });
+
+    const symbols = ["🍒", "🍋", "🍇", "🍉", "⭐", "7️⃣"];
+    let balance = 0;
+
+    function startGame() {
+      const input = parseInt(document.getElementById("startTokens").value);
+      if (isNaN(input) || input <= 0) return alert("Enter a valid amount.");
+      balance = input;
+      updateBalance();
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("gameArea").style.display = "block";
+      document.getElementById("result").innerText = "Let the Token hemorrhaging begin.";
+    }
+
+    function updateBalance() {
+      document.getElementById("balance").innerText = balance;
+    }
+
+    function playSlot() {
+      let bet = parseInt(document.getElementById("slotBet").value);
+      if (isNaN(bet) || bet <= 0 || bet > balance) return setResult("Invalid Slot bet.");
+      balance -= bet;
+      updateBalance();
+
+      let r1 = symbols[Math.floor(Math.random() * symbols.length)];
+      let r2 = symbols[Math.floor(Math.random() * symbols.length)];
+      let r3 = symbols[Math.floor(Math.random() * symbols.length)];
+
+      let counter = 0;
+      const anim = setInterval(() => {
+        document.getElementById("reels").innerText =
+          symbols[Math.floor(Math.random() * symbols.length)] + " | " +
+          symbols[Math.floor(Math.random() * symbols.length)] + " | " +
+          symbols[Math.floor(Math.random() * symbols.length)];
+        if (++counter > 10) {
+          clearInterval(anim);
+          document.getElementById("reels").innerText = `${r1} | ${r2} | ${r3}`;
+
+          let winnings = 0;
+          if (r1 === r2 && r2 === r3) winnings = bet * 5;
+          else if (r1 === r2 || r2 === r3 || r1 === r3) winnings = Math.random() < 0.2 ? bet * 1.5 : 0;
+
+          balance += Math.floor(winnings);
+          updateBalance();
+          setResult(winnings > 0 ? `🎉 You won ${Math.floor(winnings)} Tokens!` : "💨 Nothing but smoke.");
+        }
+      }, 100);
+    }
+
+    function rollDice() {
+      let bet = parseInt(document.getElementById("diceBet").value);
+      let pick = parseInt(document.getElementById("dicePick").value);
+      if (isNaN(bet) || bet <= 0 || bet > balance) return setResult("Invalid Dice bet.");
+      balance -= bet;
+      updateBalance();
+
+      let roll = Math.floor(Math.random() * 6) + 1;
+      document.getElementById("dice").innerText = `🎲 ${roll}`;
+      if (roll === pick) {
+        let win = bet * 5;
+        balance += win;
+        setResult(`🎯 Nailed it! You guessed ${pick}. +${win} Tokens.`);
+      } else setResult(`❌ Nope. You picked ${pick}, rolled ${roll}.`);
+      updateBalance();
+    }
+
+    function flipCoin() {
+      let bet = parseInt(document.getElementById("coinBet").value);
+      let pick = document.getElementById("coinPick").value;
+      if (isNaN(bet) || bet <= 0 || bet > balance) return setResult("Invalid Coin bet.");
+      balance -= bet;
+      updateBalance();
+
+      let flip = Math.random() < 0.5 ? "Heads" : "Tails";
+      document.getElementById("coin").innerText = flip === "Heads" ? "🙂" : "🙃";
+      if (flip === pick) {
+        let win = bet * 2;
+        balance += win;
+        setResult(`🤑 You guessed ${pick} and won ${win} Tokens!`);
+      } else setResult(`❌ Wrong! It landed on ${flip}.`);
+      updateBalance();
+    }
+
+    function spinRoulette() {
+      let bet = parseInt(document.getElementById("rouletteBet").value);
+      let pick = document.getElementById("roulettePick").value;
+      if (isNaN(bet) || bet <= 0 || bet > balance) return setResult("Invalid Roulette bet.");
+      balance -= bet;
+      updateBalance();
+
+      let outcome = Math.random() < 0.5 ? "Red" : "Black";
+      document.getElementById("roulette").innerText = outcome === "Red" ? "🔴" : "⚫";
+
+      if (outcome === pick) {
+        balance += bet * 2;
+        setResult(`🎯 You guessed ${pick} and won ${bet * 2} Tokens!`);
+      } else setResult("🙃 Better luck next spin.");
+      updateBalance();
+    }
+
+    function guessNumber() {
+      let num = parseInt(document.getElementById("guessNumber").value);
+      let bet = parseInt(document.getElementById("guessBet").value);
+      if (isNaN(bet) || bet <= 0 || bet > balance || isNaN(num) || num < 1 || num > 10)
+        return setResult("Invalid Guess or Bet.");
+      balance -= bet;
+      updateBalance();
+
+      let answer = Math.floor(Math.random() * 10) + 1;
+      document.getElementById("guessResult").innerText = `🎯 ${answer}`;
+      if (answer === num) {
+        let win = bet * 9;
+        balance += win;
+        setResult(`🎉 You guessed it! +${win} Tokens!`);
+      } else setResult("❌ Wrong number.");
+      updateBalance();
+    }
+
+    function setResult(msg) {
+      document.getElementById("result").innerText = msg;
+    }
+
+    function reset() {
+      document.getElementById("setup").style.display = "block";
+      document.getElementById("gameArea").style.display = "none";
+      document.getElementById("startTokens").value = 100;
+    }
+  </script>
+</body>
+</html>
